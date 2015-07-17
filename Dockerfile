@@ -27,6 +27,15 @@ RUN apt-get update -y && \
     php5-xcache \
     php5-tidy
 
+
+# Install pear mail for some legacy applications
+RUN     pear install mail     \
+    &&  pear install Net_SMTP
+
+#Patch pear mail to allow for certificate exceptions
+RUN sed -i "s/\$this->_socket_options = \$socket_options;/\$this->_socket_options = array('ssl' => array('verify_peer' => false, 'verify_peer_name' => false, 'allow_self_signed' => true));/" /usr/share/php/Net/SMTP.php
+
+
 # Configure PHP-FPM
 RUN sed -i "s/;date.timezone =.*/date.timezone = UTC/" /etc/php5/fpm/php.ini && \
     sed -i "s/;cgi.fix_pathinfo=1/cgi.fix_pathinfo=0/" /etc/php5/fpm/php.ini && \
