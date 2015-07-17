@@ -25,7 +25,8 @@ RUN apt-get update -y && \
     php5-xdebug \
     php5-xmlrpc \
     php5-xcache \
-    php5-tidy
+    php5-tidy \
+    php-pear
 
 
 # Install pear mail for some legacy applications
