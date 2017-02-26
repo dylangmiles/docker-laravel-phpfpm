@@ -55,6 +55,17 @@ RUN   echo "xdebug.remote_enable = 1" >> /etc/php5/fpm/conf.d/20-xdebug.ini
 RUN   echo "xdebug.remote_connect_back = 1" >> /etc/php5/fpm/conf.d/20-xdebug.ini
 RUN   echo "xdebug.remote_port = 9000" >> /etc/php5/fpm/conf.d/20-xdebug.ini
 
+# Set the hostname so xdebug knows which ip to connect back to. This should be set in the Dockerfile as:
+## extra_hosts:
+##      - debughost:${IP_ADDRESS}
+RUN   echo "xdebug.remote_host=debughost" >> /etc/php5/fpm/conf.d/20-xdebug.ini
+RUN   echo "xdebug.remote_autostart=1" >> /etc/php5/fpm/conf.d/20-xdebug.ini
+
+
+#DEBUG ONLY: Allow environment variables to be picked up in $_SERVER by php-fpm for debugging purposes (eg. $PHP_IDE_CONFIG).
+RUN sed -i "s/;clear_env = .*/;clear_env = no/" /etc/php5/fpm/pool.d/www.conf
+
+
 RUN mkdir -p /data
 VOLUME ["/data"]
 
